@@ -128,4 +128,11 @@
         </div>
         {% endfor %}
     </body>
+
+    <div class="user-info">
+        {% if current_user.is_authenticated %}
+        <span>{{ current_user.username }}</span>
+        <a href="{{ url_for('logout') }}" class="button">ログアウト</a>
+        {% endif %}
+    </div>
 </html>
