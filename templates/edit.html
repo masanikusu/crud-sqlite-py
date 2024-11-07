@@ -78,6 +78,17 @@
                     value="{{ task[5] }}"
                 />
             </div>
+            <div>
+                <label for="category_id">カテゴリ:</label><br>
+                <select id="category_id" name="category_id">
+                    <option value="">カテゴリなし</option>
+                    {% for category in categories %}
+                    <option value="{{ category[0] }}" {% if task and task[6] == category[0] %}selected{% endif %}>
+                        {{ category[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="form-group">
                 <button type="submit" class="button">保存</button>
                 <a href="{{ url_for('index') }}" class="button cancel-button"

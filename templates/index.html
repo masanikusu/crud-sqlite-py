@@ -41,6 +41,18 @@
             .delete-button {
                 background-color: #f44336;
             }
+            .category-tag {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 0.8em;
+                color: white;
+                margin-bottom: 8px;
+            }
+            .task {
+                border-left-width: 4px;
+                border-left-style: solid;
+            }
         </style>
     </head>
     <body>
@@ -62,8 +74,21 @@
                     <input type="date" id="due_date" name="due_date" />
                 </div>
                 <button type="submit" class="button">追加</button>
+                <div id="category-flex">
+                    <label for="category_id">カテゴリ:</label><br>
+                    <select id="category_id" name="category_id">
+                        <option value="">カテゴリなし</option>
+                        {% for category in categories %}
+                        <option value="{{ category[0] }}" {% if task and task[6] == category[0] %}selected{% endif %}>
+                            {{ category[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div><a href="{{ url_for('list_categories')}}">カテゴリー登録画面</a></div>
+                </div>
             </form>
         </div>
+
 
         <h2>タスク一覧</h2>
         {% for task, is_overdue in tasks %}
@@ -71,6 +96,11 @@
             class="task {% if task[4] %}completed{% endif %} {% if is_overdue %}overdue{% endif %}"
         >
             <h3>{{ task[1] }}</h3>
+            {% if task[7] %}  <!-- カテゴリ名 -->
+            <div class="category-tag" style="background-color: {{ task[8] }}">
+                {{ task[7] }}
+            </div>
+            {% endif %}
             <p>{{ task[2] }}</p>
             <p>作成日時: {{ task[3] }}</p>
             {% if task[5] %}
