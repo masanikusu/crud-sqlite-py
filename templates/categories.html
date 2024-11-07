@@ -70,5 +70,12 @@
         <div>
             <a href="{{ url_for('index') }}" class="button">タスク一覧に戻る</a>
         </div>
+
+        <div class="user-info">
+            {% if current_user.is_authenticated %}
+            <span>{{ current_user.username }}</span>
+            <a href="{{ url_for('logout') }}" class="button">ログアウト</a>
+            {% endif %}
+        </div>
     </body>
 </html>
