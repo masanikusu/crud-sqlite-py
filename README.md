@@ -10,7 +10,7 @@ python init_db.py
 ```
 
 <!-- ### テストデータの挿入 -->
-<!-- 
+<!--
 ```
 python insert_test_data.py
 ``` -->
