@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block title %}カテゴリ編集{% endblock %} {% block
+content %}
+<h1>カテゴリ編集</h1>
+
+<form action="{{ url_for('categories.edit', id=category.id) }}" method="post">
+    <div class="form-group">
+        <label for="name">カテゴリ名:</label>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{ category.name }}"
+            required
+        />
+    </div>
+    <div class="form-group">
+        <label for="color">色:</label>
+        <input
+            type="color"
+            id="color"
+            name="color"
+            value="{{ category.color }}"
+        />
+    </div>
+    <button type="submit" class="button">保存</button>
+    <a href="{{ url_for('categories.index') }}" class="button button-red"
+        >キャンセル</a
+    >
+</form>
+{% endblock %}
