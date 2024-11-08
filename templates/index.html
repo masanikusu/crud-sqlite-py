@@ -1,0 +1,138 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>タスク管理システム</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .task {
+                border: 1px solid #ddd;
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .completed {
+                background-color: #e8f5e9;
+            }
+            .task-form {
+                margin-bottom: 20px;
+            }
+            .button {
+                background-color: #4caf50;
+                color: white;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                margin: 2px;
+            }
+            .edit-button {
+                background-color: #2196f3;
+            }
+            .delete-button {
+                background-color: #f44336;
+            }
+            .category-tag {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 0.8em;
+                color: white;
+                margin-bottom: 8px;
+            }
+            .task {
+                border-left-width: 4px;
+                border-left-style: solid;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>タスク管理システム</h1>
+
+        <div class="task-form">
+            <h2>新規タスク追加</h2>
+            <form action="{{ url_for('add_task') }}" method="post">
+                <div>
+                    <label for="title">タイトル:</label><br />
+                    <input type="text" id="title" name="title" required />
+                </div>
+                <div>
+                    <label for="description">説明:</label><br />
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div>
+                    <label for="due_date">期限:</label><br />
+                    <input type="date" id="due_date" name="due_date" />
+                </div>
+                <button type="submit" class="button">追加</button>
+                <div id="category-flex">
+                    <label for="category_id">カテゴリ:</label><br>
+                    <select id="category_id" name="category_id">
+                        <option value="">カテゴリなし</option>
+                        {% for category in categories %}
+                        <option value="{{ category[0] }}" {% if task and task[6] == category[0] %}selected{% endif %}>
+                            {{ category[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div><a href="{{ url_for('list_categories')}}">カテゴリー登録画面</a></div>
+                </div>
+            </form>
+        </div>
+
+
+        <h2>タスク一覧</h2>
+        {% for task, is_overdue in tasks %}
+        <div
+            class="task {% if task[4] %}completed{% endif %} {% if is_overdue %}overdue{% endif %}"
+        >
+            <h3>{{ task[1] }}</h3>
+            {% if task[7] %}  <!-- カテゴリ名 -->
+            <div class="category-tag" style="background-color: {{ task[8] }}">
+                {{ task[7] }}
+            </div>
+            {% endif %}
+            <p>{{ task[2] }}</p>
+            <p>作成日時: {{ task[3] }}</p>
+            {% if task[5] %}
+            <p>期限: {{ task[5] }}</p>
+            {% endif %}
+            <div class="task-actions">
+                {% if not task[4] %}
+                <a
+                    href="{{ url_for('complete_task', id=task[0]) }}"
+                    class="button"
+                    >完了</a
+                >
+                {% endif %}
+                <a
+                    href="{{ url_for('edit_task', id=task[0]) }}"
+                    class="button edit-button"
+                    >編集</a
+                >
+                <a
+                    href="{{ url_for('delete_task', id=task[0]) }}"
+                    class="button delete-button"
+                    >削除</a
+                >
+            </div>
+        </div>
+        {% endfor %}
+    </body>
+
+    <div class="user-info">
+        {% if current_user.is_authenticated %}
+        <span>{{ current_user.username }}</span>
+        <a href="{{ url_for('logout') }}" class="button">ログアウト</a>
+        {% endif %}
+    </div>
+</html>
